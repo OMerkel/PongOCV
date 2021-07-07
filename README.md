@@ -1,6 +1,6 @@
 # PongOCV
 PongOCV is a solo Pong or Breakout alike game using Computer Vision via
-live Webcam (e.g. camera from your notebook) to control your paddle.
+live camera video (e.g. camera from your notebook) to control your paddle.
 
 ## Third Party Libraries
 Third Party Dependencies:
@@ -36,4 +36,4 @@ Version tagged _02-full_PongOCV_game_:
 
 <img src="img/02-my_controlling_object.jpg" width="30%" />
 
-Above image should show you what kind of object shall be detected.
+Above image should show you what kind of object shall be detected in my scenario. Feel free to configure your own...
