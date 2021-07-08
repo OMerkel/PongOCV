@@ -26,6 +26,12 @@ Version tagged _02-full_PongOCV_game_:
 
 <img src="img/02-full_PongOCV_game.jpg" width="50%" />
 
+The video is shown in wrong colors. This is since the RGB is converted into HSV space.
+Conversion is done to ease description of the color detected object.
+Uni colored objects have uniform or nar
+rower range in hue and dependent on light the saturation and brightness can cover a wider range.
+Now if converted HSV space is drawn on RGB canvas these wrong colors show up.
+
 * Adding a control panel to configure the lower and upper ranges of HSV (Hue, Sat, Val) to describe the controlling object
 * Draw boundary box on biggest detected object of the HSV in range
 * Mirror the camera image
@@ -37,3 +43,13 @@ Version tagged _02-full_PongOCV_game_:
 <img src="img/02-my_controlling_object.jpg" width="30%" />
 
 Above image should show you what kind of object shall be detected in my scenario. Feel free to configure your own...
+
+Version tagged _03-RGB_and_HSV_:
+* https://github.com/OMerkel/PongOCV/releases/tag/03-RGB_and_HSV
+
+<img src="img/03-draw RGB.jpg" width="50%" />
+
+* stricter handling RGB for drawing and HSV for analysis
+* Avoid devision by zero if width of detected colored object covers complete screen width
+* Use left paddle edge in computations instead of paddle center
+* Minor corrections due to usage of integer arithmetics

@@ -45,12 +45,12 @@ class PongOCV:
         """
         blue default paddle control color
         """
-        cv2.setTrackbarPos( "lowerHue", "Control", 35 )
-        cv2.setTrackbarPos( "upperHue", "Control", 105 )
+        cv2.setTrackbarPos( "lowerHue", "Control", 80 )
+        cv2.setTrackbarPos( "upperHue", "Control", 130 )
         cv2.setTrackbarPos( "lowerSat", "Control", 5 )
         cv2.setTrackbarPos( "upperSat", "Control", 100 )
-        cv2.setTrackbarPos( "lowerVal", "Control", 45 )
-        cv2.setTrackbarPos( "upperVal", "Control", 77 )
+        cv2.setTrackbarPos( "lowerVal", "Control", 125 )
+        cv2.setTrackbarPos( "upperVal", "Control", 215 )
 
     def initCamera(self):
         ret, frame = self.cam.read()
@@ -76,8 +76,8 @@ class PongOCV:
             self.ball["dy"] = -self.ball["dy"]
         if self.ball["y"] >= self.paddle["y"]:
             self.ball["dy"] = -self.ball["dy"]
-            if self.paddle["x"] - self.paddle["sizex"] / 2 < self.ball["x"] and \
-                self.ball["x"] < self.paddle["x"] + self.paddle["sizex"] / 2:
+            if self.paddle["x"] < self.ball["x"] and \
+                self.ball["x"] < self.paddle["x"] + self.paddle["sizex"]:
                 self.score["value"] = self.score["value"] + 10
 
     def drawObjects(self, frame):
@@ -85,22 +85,16 @@ class PongOCV:
         cv2.circle(frame, ( self.ball["x"], self.ball["y"] ), self.ball["radius"], (255, 255, 255), thickness=3)
 
         # draw paddle
-        cv2.rectangle(frame, (int(self.paddle["x"]-self.paddle["sizex"]/2), self.paddle["y"]),
-             (int(self.paddle["x"]+self.paddle["sizex"]/2), self.paddle["y"]+5), (255, 255, 255), thickness=3)
+        cv2.rectangle(frame, (int(self.paddle["x"]), self.paddle["y"]),
+             (int(self.paddle["x"]+self.paddle["sizex"]), self.paddle["y"]+5), (255, 255, 255), thickness=3)
 
-        # horizontal mirror (notebook webcam and display used like a mirror)
-        frame2 = frame.copy()
-        frame2 = cv2.flip(frame, 1)
-
-        cv2.putText(frame2, str(self.score["value"]),
+        cv2.putText(frame, str(self.score["value"]),
             self.score["bottomLeft"],
             self.score["font"],
             self.score["fontScale"],
             self.score["fontColor"],
             self.score["lineType"])
-
-        # show frame
-        cv2.imshow("frame", frame2)
+        cv2.imshow("frame", frame)
 
     def run(self):
         self.initUi()
@@ -109,10 +103,15 @@ class PongOCV:
         key = 0
         while key!=27 and self.cam.isOpened():
             ret, frame = self.cam.read()
-    
-            # convert to HSV to ease filtering for color range
-            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+            # horizontal mirror (notebook webcam and display used like a mirror)
+            frameRGB = frame.copy()
+            frameRGB = cv2.flip(frame, 1)
 
+            # horizontal mirror (notebook webcam and display used like a mirror)
+            frameHSV = frame.copy()
+            frameHSV = cv2.flip(frame, 1)
+            # convert to HSV to ease filtering for color range
+            frameHSV = cv2.cvtColor(frameHSV, cv2.COLOR_BGR2HSV)
             self.targetColor = {
                 "lower" : (cv2.getTrackbarPos("lowerHue", "Control"),
                            cv2.getTrackbarPos("lowerSat", "Control"),
@@ -120,7 +119,7 @@ class PongOCV:
                 "upper" : (cv2.getTrackbarPos("upperHue", "Control"),
                            cv2.getTrackbarPos("upperSat", "Control"),
                            cv2.getTrackbarPos("upperVal", "Control")) }
-            mask = cv2.inRange(frame,
+            mask = cv2.inRange(frameHSV,
                                self.targetColor['lower'],
                                self.targetColor['upper'])
 
@@ -133,13 +132,21 @@ class PongOCV:
 
                 # draw bounding box
                 x, y, w, h = cv2.boundingRect(controlObject)
-                cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 255, 255), thickness=3)
-
-                self.paddle["x"] = int((self.paddle["decay"] *
-                    self.paddle["x"] + x + w / 2) / (self.paddle["decay"] + 1))
+                cv2.rectangle(frameRGB, (x, y), (x+w, y+h), (255, 255, 255), thickness=3)
+                try:
+                    paddle_target_x = (x/(self.frameSizeX-w)) * (self.frameSizeX-self.paddle["sizex"])
+                    # correction due to integer arithmetics
+                    paddle_target_x = paddle_target_x + \
+                        self.paddle["decay"] * paddle_target_x / self.frameSizeX
+                except ZeroDivisionError:
+                    # width of detected colored object covers complete screen width
+                    paddle_target_x = 0
+                self.paddle["x"] = int(
+                    (self.paddle["decay"] * self.paddle["x"] + paddle_target_x) /
+                    (self.paddle["decay"] + 1))
             self.updateObjects()
-            self.drawObjects( frame )
-    
+            self.drawObjects( frameRGB )
+
             key = cv2.waitKey(1) & 0xff
         self.release()
 
