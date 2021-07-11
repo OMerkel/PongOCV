@@ -53,3 +53,11 @@ Version tagged _03-RGB_and_HSV_:
 * Avoid devision by zero if width of detected colored object covers complete screen width
 * Use left paddle edge in computations instead of paddle center
 * Minor corrections due to usage of integer arithmetics
+
+## External Links
+
+### HSV Basics
+
+* https://en.wikipedia.org/wiki/HSL_and_HSV
+    * _Hint:_ Hold a color spectrum (full range of rainbow colors) in front of the camera. Then play around with the hue value settings of the control panel.
+ 
