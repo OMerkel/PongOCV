@@ -96,11 +96,29 @@ class PongOCV:
             self.score["lineType"])
         cv2.imshow("frame", frame)
 
+    def showTestImage(self):
+        ret, frame = self.cam.read()
+        frameHSV = frame.copy()
+        frameHSV = cv2.cvtColor(frameHSV, cv2.COLOR_BGR2HSV)
+        y3 = int(self.frameSizeY/3)
+        bars = 16
+        barwidth = int(self.frameSizeX/bars)
+        for n in range(bars):
+            tmp = frameHSV[0:y3, n*barwidth:(n+1)*barwidth]
+            tmp[:, :] = (int(256/bars*n), 255, 255)
+            tmp = frameHSV[y3:2*y3, n*barwidth:(n+1)*barwidth]
+            tmp[:, :] = (130, int(256/bars*n), 255)
+            tmp = frameHSV[2*y3:self.frameSizeY, n*barwidth:(n+1)*barwidth]
+            tmp[:, :] = (130, 255, int(256/bars*n))
+        frameHSV = cv2.cvtColor(frameHSV, cv2.COLOR_HSV2BGR)
+        cv2.imshow("Hue Saturation Value - blueish", frameHSV)
+
     def run(self):
         self.initUi()
         self.initCamera()
         self.initObjects()
         key = 0
+        self.showTestImage()
         while key!=27 and self.cam.isOpened():
             ret, frame = self.cam.read()
             # horizontal mirror (notebook webcam and display used like a mirror)
