@@ -112,6 +112,12 @@ class PongOCV:
             frameHSV = cv2.flip(frame, 1)
             # convert to HSV to ease filtering for color range
             frameHSV = cv2.cvtColor(frameHSV, cv2.COLOR_BGR2HSV)
+
+            poiX, poiY = ( int(self.frameSizeX / 2),  int(self.frameSizeY / 4) )
+            cv2.circle(frameRGB, (poiX, poiY), 5, (255, 255, 255), thickness=1)
+            hsv = frameHSV[poiY, poiX]
+            print("HSV:", hsv)
+
             self.targetColor = {
                 "lower" : (cv2.getTrackbarPos("lowerHue", "Control"),
                            cv2.getTrackbarPos("lowerSat", "Control"),
