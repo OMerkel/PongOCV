@@ -8,7 +8,7 @@ Third Party Dependencies:
 * Computer Vision Library OpenCV, https://opencv.org/
 
 ## Legal and Licensing
-Copyright (c) 2021, Oliver Merkel.
+Copyright (c) 2021, 2023, Oliver Merkel.
 Please see the AUTHORS file for details.
 All rights reserved.
 
@@ -16,10 +16,23 @@ Use of this code is governed by a
 MIT license that can be found in the LICENSE file.
 
 ## Changes
-Version tagged _01-bouncing_ball_and_webcam_image_:
-* https://github.com/OMerkel/PongOCV/releases/tag/01-bouncing_ball_and_webcam_image
+Version tagged _04-Hand_recognition_IndexFingerTip_:
+* https://github.com/OMerkel/PongOCV/releases/tag/04-Hand_recognition_IndexFingerTip
 
-<img src="img/01-bouncing_ball_and_webcam_image.jpg" width="30%" />
+<img src="img/04-control_by_IndexFingerTip.jpg" width="50%" />
+
+* There is now a version, too, where Hand recognition is used
+* Control the game paddle by you IndexFingerTip
+
+Version tagged _03-RGB_and_HSV_:
+* https://github.com/OMerkel/PongOCV/releases/tag/03-RGB_and_HSV
+
+<img src="img/03-draw RGB.jpg" width="50%" />
+
+* Stricter handling RGB for drawing and HSV for analysis
+* Avoid devision by zero if width of detected colored object covers complete screen width
+* Use left paddle edge in computations instead of paddle center
+* Minor corrections due to usage of integer arithmetics
 
 Version tagged _02-full_PongOCV_game_:
 * https://github.com/OMerkel/PongOCV/releases/tag/02-full_PongOCV_game
@@ -44,15 +57,10 @@ Now if converted HSV space is drawn on RGB canvas these wrong colors show up.
 
 Above image should show you what kind of object shall be detected in my scenario. Feel free to configure your own...
 
-Version tagged _03-RGB_and_HSV_:
-* https://github.com/OMerkel/PongOCV/releases/tag/03-RGB_and_HSV
+Version tagged _01-bouncing_ball_and_webcam_image_:
+* https://github.com/OMerkel/PongOCV/releases/tag/01-bouncing_ball_and_webcam_image
 
-<img src="img/03-draw RGB.jpg" width="50%" />
-
-* stricter handling RGB for drawing and HSV for analysis
-* Avoid devision by zero if width of detected colored object covers complete screen width
-* Use left paddle edge in computations instead of paddle center
-* Minor corrections due to usage of integer arithmetics
+<img src="img/01-bouncing_ball_and_webcam_image.jpg" width="30%" />
 
 ## External Links
 
